@@ -3,20 +3,6 @@ import sqlite3
 from sqlite3 import Error
 
 
-def create_connection(db_file):
-    try:
-        conn = sqlite3.connect(db_file)
-        print(sqlite3.version)
-    except Error as e:
-        print(e)
-    finally:
-        conn.close()
-
-
-if __name__ == '__main__':
-    create_connection('sqlite.db')
-
-
 def readFiles(filename):
     first_names = []
     last_names = []
@@ -43,3 +29,51 @@ print(last_names)
 print(dob)
 print(favorite_colors)
 print(cat)
+
+
+def create_connection(db_file):
+    try:
+        conn = sqlite3.connect(db_file)
+        print(sqlite3.version)
+    except Error as e:
+        print(e)
+    finally:
+        conn.close()
+
+
+def create_table(conn, create_table_sql):
+    try:
+        c = conn.cursor()
+        c.execute(create_table_sql)
+    except Error as e:
+        print(e)
+
+
+def main():
+    database = "sqlite.db"
+
+    sql_create_colors_table = """ CREATE TABLE IF NOT EXISTS colors (
+        id integer PRIMARY KEY,
+        first_name text NOT NULL,
+        last_name text NOT NULL,
+        favorite_colors text NOT NULL
+    ); """
+
+    sql_create_cat_table = """ CREATE TABLE IF NOT EXISTS cat (
+        id integer PRIMARY KEY,
+        first_name text NOT NULL,
+        last_name text NOT NULL,
+        cat text NOT NULL
+    ); """
+
+    conn = create_connection(database)
+    if conn is not None:
+        create_table(conn, sql_create_colors_table)
+        create_table(sql_create_cat_table)
+    else:
+        print("Error! cannot create the database connection.")
+
+
+if __name__ == '__main__':
+    # create_connection('sqlite.db')
+    main()
