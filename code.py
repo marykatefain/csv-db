@@ -34,23 +34,27 @@ print(cat)
 def create_connection(db_file):
     try:
         conn = sqlite3.connect(db_file)
+        return conn
         print(sqlite3.version)
     except Error as e:
         print(e)
-    finally:
-        conn.close()
+    # finally:
+    #     conn.close()
+    #     print("closing")
 
 
 def create_table(conn, create_table_sql):
     try:
         c = conn.cursor()
         c.execute(create_table_sql)
+        print("creating table")
     except Error as e:
         print(e)
 
 
 def main():
     database = "sqlite.db"
+    print(database)
 
     sql_create_colors_table = """ CREATE TABLE IF NOT EXISTS colors (
         id integer PRIMARY KEY,
@@ -69,7 +73,7 @@ def main():
     conn = create_connection(database)
     if conn is not None:
         create_table(conn, sql_create_colors_table)
-        create_table(sql_create_cat_table)
+        create_table(conn, sql_create_cat_table)
     else:
         print("Error! cannot create the database connection.")
 
